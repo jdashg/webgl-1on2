@@ -1,0 +1,18 @@
+{
+   "manifest_version": 2,
+   "name": "webgl-1on2",
+   "version": "0.1",
+
+   "content_scripts": [
+      {
+        "matches": ["https://*/*", "file://*/*"],
+        "js": ["inject.js"],
+        "run_at": "document_start",
+        "all_frames": true
+      }
+   ],
+
+   "web_accessible_resources": [
+      "webgl-1on2.js"
+   ]
+}

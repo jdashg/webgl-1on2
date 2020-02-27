@@ -160,6 +160,41 @@
    // -
 
    function hook_general(gl) {
+      const strict = gl._1on2.strict;
+
+      let DRAW_ELEMENTS_TYPES;
+      let RENDERBUFFER_STORAGE_TYPES;
+      let TEX_IMAGE_FORMATS;
+      let TEX_IMAGE_TYPES;
+
+      gl._1on2.reset = function() {
+         DRAW_ELEMENTS_TYPES = new Set([
+            gl.UNSIGNED_BYTE,
+            gl.UNSIGNED_SHORT,
+         ]);
+         RENDERBUFFER_STORAGE_TYPES = new Set([
+            gl.RGBA4,
+            gl.RGB565,
+            gl.RGB5_A1,
+            gl.DEPTH_COMPONENT16,
+            gl.STENCIL_INDEX8,
+            gl.DEPTH_STENCIL,
+         ]);
+         TEX_IMAGE_FORMATS = new Set([
+            gl.RGBA,
+            gl.RGB,
+            gl.LUMINANCE,
+            gl.ALPHA,
+            gl.LUMINANCE_ALPHA,
+         ]);
+         TEX_IMAGE_TYPES = new Set([
+            gl.UNSIGNED_BYTE,
+            gl.UNSIGNED_SHORT_4_4_4_4,
+            gl.UNSIGNED_SHORT_5_5_5_1,
+            gl.UNSIGNED_SHORT_5_6_5,
+         ]);
+      }
+
       const builtin_exts = [
          'ANGLE_instanced_arrays',
          'EXT_blend_minmax',
@@ -208,12 +243,22 @@
             // Now make the actual ext objects.
             switch (name) {
             case 'ANGLE_instanced_arrays'       : return new WebGL1on2InstancedArrays(gl);
-            case 'EXT_blend_minmax'             : return new WebGL1on2BlendMinMax();
+            case 'EXT_blend_minmax':
+               BLEND_MODES.add(gl.MIN);
+               BLEND_MODES.
+               return new WebGL1on2BlendMinMax();
             case 'EXT_frag_depth'               : return new WebGL1on2FragDepth();
             case 'EXT_shader_texture_lod'       : return new WebGL1on2ShaderTextureLod();
-            case 'OES_element_index_uint'       : return new WebGL1on2ElementIndexUint();
+            case 'OES_element_index_uint':
+               DRAW_ELEMENTS_TYPES.add(gl.UNSIGNED_INT);
+               return new WebGL1on2ElementIndexUint();
+
             case 'OES_standard_derivatives'     : return new WebGL1on2StandardDerivatives();
-            case 'OES_texture_float'            : return new WebGL1on2TextureFloat();
+
+            case 'OES_texture_float':
+               TEX_IMAGE_TYPES.add(gl.FLOAT);
+               return new WebGL1on2TextureFloat();
+
             case 'OES_texture_half_float'       : return new WebGL1on2TextureHalfFloat();
             case 'OES_texture_half_float_linear': return new WebGL1on2TextureHalfFloatLinear();
             case 'OES_vertex_array_object'      : return new WebGL1on2VertexArrayObject(gl);
@@ -238,6 +283,19 @@
          };
       }
 
+
+      {
+         const was = gl.drawElements;
+         gl.drawElements = function() {
+            if (strict) {
+               if (!DRAW_ELEMENTS_TYPES.has(arguments[2])) {
+                  arguments[2] += 0x10000;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+
       {
          const was = gl.readPixels;
          gl.readPixels = function() {
@@ -251,6 +309,11 @@
       {
          const was = gl.renderbufferStorage;
          gl.renderbufferStorage = function() {
+            if (strict) {
+               if (!RENDERBUFFER_STORAGE_TYPES.has(arguments[1])) {
+                  arguments[1] += 0x10000; // 0x1408 would become 0x11408.
+               }
+            }
             if (arguments[1] == gl.DEPTH_STENCIL) {
                arguments[1] = gl.DEPTH24_STENCIL8;
             }
@@ -272,7 +335,21 @@
                format_id = 3;
                type_id = format_id + 1;
                break;
+            default:
+               if (strict) {
+                  throw new Error('Too many arguments: ' + arguments);
+               }
+               break;
             }
+            if (strict) {
+               if (!TEX_IMAGE_FORMATS.has(arguments[format_id])) {
+                  arguments[format_id] = 0x10000;
+               }
+               if (!TEX_IMAGE_TYPES.has(arguments[type_id])) {
+                  arguments[type_id] = 0x10000;
+               }
+            }
+
             if (type_id && arguments[type_id] == HALF_FLOAT_OES) {
                arguments[type_id] = gl.HALF_FLOAT;
             }
@@ -292,7 +369,21 @@
                format_id = 3;
                type_id = format_id + 1;
                break;
+            default:
+               if (strict) {
+                  throw new Error('Too many arguments: ' + arguments);
+               }
+               break;
             }
+            if (strict) {
+               if (!TEX_IMAGE_FORMATS.has(arguments[format_id])) {
+                  arguments[format_id] = 0x10000;
+               }
+               if (!TEX_IMAGE_TYPES.has(arguments[type_id])) {
+                  arguments[type_id] = 0x10000;
+               }
+            }
+
             if (type_id && arguments[type_id] == HALF_FLOAT_OES) {
                arguments[type_id] = gl.HALF_FLOAT;
             }
@@ -384,6 +475,10 @@
       }
    }
 
+   function hide_webgl2(gl) {
+
+   }
+
    prev = HTMLCanvasElement.prototype.getContext;
    HTMLCanvasElement.prototype.getContext = function() {
       const as_strict = (arguments[0] == 'webgl');
@@ -396,9 +491,14 @@
       const ret = prev.apply(this, arguments);
       if (as_1on2 && ret && !ret._1on2) {
          ret._1on2 = {
-         };
+            strict: as_strict,
+            hidden: {},
+         }
          hook_general(ret);
          hook_shader_source(ret);
+         if (as_strict) {
+            hide_webgl2(ret);
+         }
       }
       return ret;
    }

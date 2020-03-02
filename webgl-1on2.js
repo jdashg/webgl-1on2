@@ -1,10 +1,22 @@
 (() => {
    // Let's run WebGL 1 content on WebGL 2!
 
+   const REPLACE_WEBGL1 = true;
+   const DEBUG_SPEW = false;
+
+   // -
+
+   if (window.WebGL1on2) return;
+   window.WebGL1on2 = true;
+
+   if (DEBUG_SPEW) {
+      console.log('[webgl-1on2] Injecting...');
+   }
+
    // -
 
    class WebGL1on2InstancedArrays {
-      const VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = 0x88FE;
+      VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = WebGL2RenderingContext.VERTEX_ATTRIB_ARRAY_DIVISOR;
 
       constructor(gl) {
          this._1on2 = {
@@ -14,24 +26,24 @@
 
       drawArraysInstancedANGLE() {
          const gl = this._1on2.gl;
-         const fn = gl.drawArraysInstanced || gl._1on2.hidden.drawArraysInstanced;
-         return fn.apply(gl, arguments);
+         if (!gl) return;
+         return gl.__proto__.drawArraysInstanced.apply(gl, arguments);
       }
       drawElementsInstancedANGLE() {
          const gl = this._1on2.gl;
-         const fn = gl.drawElementsInstanced || gl._1on2.hidden.drawElementsInstanced;
-         return fn.apply(gl, arguments);
+         if (!gl) return;
+         return gl.__proto__.drawElementsInstanced.apply(gl, arguments);
       }
       vertexAttribDivisorANGLE() {
          const gl = this._1on2.gl;
-         const fn = gl.drawElementsInstanced || gl._1on2.hidden.drawElementsInstanced;
-         return fn.apply(gl, arguments);
+         if (!gl) return;
+         return gl.__proto__.vertexAttribDivisor.apply(gl, arguments);
       }
    };
 
    class WebGL1on2BlendMinMax {
-      const MIN_EXT = 0x8007;
-      const MAX_EXT = 0x8008;
+      MIN_EXT = WebGL2RenderingContext.MIN;
+      MAX_EXT = WebGL2RenderingContext.MAX;
    };
 
    class WebGL1on2FragDepth {};
@@ -40,16 +52,16 @@
    class WebGL1on2StandardDerivatives {};
    class WebGL1on2TextureFloat {};
 
-   const HALF_FLOAT_OES = 0x8D61;
+   const GL_HALF_FLOAT_OES = 0x8D61;
 
    class WebGL1on2TextureHalfFloat {
-      const HALF_FLOAT_OES = 0x8D61;
+      HALF_FLOAT_OES = GL_HALF_FLOAT_OES;
    };
 
    class WebGL1on2TextureHalfFloatLinear {};
 
    class WebGL1on2VertexArrayObject {
-      const VERTEX_ARRAY_BINDING_OES = 0x85B5;
+      VERTEX_ARRAY_BINDING_OES = WebGL2RenderingContext.VERTEX_ARRAY_BINDING;
 
       constructor(gl) {
          this._1on2 = {
@@ -59,67 +71,67 @@
 
       createVertexArrayOES() {
          const gl = this._1on2.gl;
-         const fn = gl.createVertexArray || gl._1on2.hidden.createVertexArray;
-         return fn.apply(gl, arguments);
+         if (!gl) return null;
+         return gl.__proto__.createVertexArray.apply(gl, arguments);
       }
       deleteVertexArrayOES() {
          const gl = this._1on2.gl;
-         const fn = gl.deleteVertexArray || gl._1on2.hidden.deleteVertexArray;
-         return fn.apply(gl, arguments);
+         if (!gl) return;
+         return gl.__proto__.deleteVertexArray.apply(gl, arguments);
       }
       isVertexArrayOES() {
          const gl = this._1on2.gl;
-         const fn = gl.isVertexArray || gl._1on2.hidden.isVertexArray;
-         return fn.apply(gl, arguments);
+         if (!gl) return false;
+         return gl.__proto__.isVertexArray.apply(gl, arguments);
       }
       bindVertexArrayOES() {
          const gl = this._1on2.gl;
-         const fn = gl.isVertexArray || gl._1on2.hidden.isVertexArray;
-         return fn.apply(gl, arguments);
+         if (!gl) return;
+         return gl.__proto__.isVertexArray.apply(gl, arguments);
       }
    };
 
    class WebGL1on2DepthTexture {
-      const UNSIGNED_INT_24_8_WEBGL = 0x84FA;
+      UNSIGNED_INT_24_8_WEBGL = WebGL2RenderingContext.UNSIGNED_INT_24_8;
    };
 
    class WebGL1on2DrawBuffers {
-      const COLOR_ATTACHMENT0_WEBGL     = 0x8CE0;
-      const COLOR_ATTACHMENT1_WEBGL     = 0x8CE1;
-      const COLOR_ATTACHMENT2_WEBGL     = 0x8CE2;
-      const COLOR_ATTACHMENT3_WEBGL     = 0x8CE3;
-      const COLOR_ATTACHMENT4_WEBGL     = 0x8CE4;
-      const COLOR_ATTACHMENT5_WEBGL     = 0x8CE5;
-      const COLOR_ATTACHMENT6_WEBGL     = 0x8CE6;
-      const COLOR_ATTACHMENT7_WEBGL     = 0x8CE7;
-      const COLOR_ATTACHMENT8_WEBGL     = 0x8CE8;
-      const COLOR_ATTACHMENT9_WEBGL     = 0x8CE9;
-      const COLOR_ATTACHMENT10_WEBGL    = 0x8CEA;
-      const COLOR_ATTACHMENT11_WEBGL    = 0x8CEB;
-      const COLOR_ATTACHMENT12_WEBGL    = 0x8CEC;
-      const COLOR_ATTACHMENT13_WEBGL    = 0x8CED;
-      const COLOR_ATTACHMENT14_WEBGL    = 0x8CEE;
-      const COLOR_ATTACHMENT15_WEBGL    = 0x8CEF;
+      COLOR_ATTACHMENT0_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0;
+      COLOR_ATTACHMENT1_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 1;
+      COLOR_ATTACHMENT2_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 2;
+      COLOR_ATTACHMENT3_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 3;
+      COLOR_ATTACHMENT4_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 4;
+      COLOR_ATTACHMENT5_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 5;
+      COLOR_ATTACHMENT6_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 6;
+      COLOR_ATTACHMENT7_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 7;
+      COLOR_ATTACHMENT8_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 8;
+      COLOR_ATTACHMENT9_WEBGL     = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 9;
+      COLOR_ATTACHMENT10_WEBGL    = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 10;
+      COLOR_ATTACHMENT11_WEBGL    = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 11;
+      COLOR_ATTACHMENT12_WEBGL    = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 12;
+      COLOR_ATTACHMENT13_WEBGL    = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 13;
+      COLOR_ATTACHMENT14_WEBGL    = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 14;
+      COLOR_ATTACHMENT15_WEBGL    = WebGL2RenderingContext.COLOR_ATTACHMENT0 + 15;
 
-      const DRAW_BUFFER0_WEBGL          = 0x8825;
-      const DRAW_BUFFER1_WEBGL          = 0x8826;
-      const DRAW_BUFFER2_WEBGL          = 0x8827;
-      const DRAW_BUFFER3_WEBGL          = 0x8828;
-      const DRAW_BUFFER4_WEBGL          = 0x8829;
-      const DRAW_BUFFER5_WEBGL          = 0x882A;
-      const DRAW_BUFFER6_WEBGL          = 0x882B;
-      const DRAW_BUFFER7_WEBGL          = 0x882C;
-      const DRAW_BUFFER8_WEBGL          = 0x882D;
-      const DRAW_BUFFER9_WEBGL          = 0x882E;
-      const DRAW_BUFFER10_WEBGL         = 0x882F;
-      const DRAW_BUFFER11_WEBGL         = 0x8830;
-      const DRAW_BUFFER12_WEBGL         = 0x8831;
-      const DRAW_BUFFER13_WEBGL         = 0x8832;
-      const DRAW_BUFFER14_WEBGL         = 0x8833;
-      const DRAW_BUFFER15_WEBGL         = 0x8834;
+      DRAW_BUFFER0_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0;
+      DRAW_BUFFER1_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 1;
+      DRAW_BUFFER2_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 2;
+      DRAW_BUFFER3_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 3;
+      DRAW_BUFFER4_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 4;
+      DRAW_BUFFER5_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 5;
+      DRAW_BUFFER6_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 6;
+      DRAW_BUFFER7_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 7;
+      DRAW_BUFFER8_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 8;
+      DRAW_BUFFER9_WEBGL     = WebGL2RenderingContext.DRAW_BUFFER0 + 9;
+      DRAW_BUFFER10_WEBGL    = WebGL2RenderingContext.DRAW_BUFFER0 + 10;
+      DRAW_BUFFER11_WEBGL    = WebGL2RenderingContext.DRAW_BUFFER0 + 11;
+      DRAW_BUFFER12_WEBGL    = WebGL2RenderingContext.DRAW_BUFFER0 + 12;
+      DRAW_BUFFER13_WEBGL    = WebGL2RenderingContext.DRAW_BUFFER0 + 13;
+      DRAW_BUFFER14_WEBGL    = WebGL2RenderingContext.DRAW_BUFFER0 + 14;
+      DRAW_BUFFER15_WEBGL    = WebGL2RenderingContext.DRAW_BUFFER0 + 15;
 
-      const MAX_COLOR_ATTACHMENTS_WEBGL = 0x8CDF;
-      const MAX_DRAW_BUFFERS_WEBGL      = 0x8824;
+      MAX_COLOR_ATTACHMENTS_WEBGL = WebGL2RenderingContext.MAX_COLOR_ATTACHMENTS;
+      MAX_DRAW_BUFFERS_WEBGL      = WebGL2RenderingContext.MAX_DRAW_BUFFERS;
 
 
       constructor(gl) {
@@ -130,49 +142,173 @@
 
       drawBuffersWEBGL() {
          const gl = this._1on2.gl;
-         const fn = gl.drawBuffers || gl._1on2.hidden.drawBuffers;
-         return fn.apply(gl, arguments);
+         if (!gl) return;
+         return gl.__proto__.drawBuffers.apply(gl, arguments);
       }
    };
 
    class WebGL1on2ColorBufferHalfFloat {
-      const RGBA16F_EXT = 0x881A;
-      const RGB16F_EXT = 0x881B;
-      const FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT = 0x8211;
-      const UNSIGNED_NORMALIZED_EXT = 0x8C17;
+      RGBA16F_EXT = WebGL2RenderingContext.RGBA16F;
+      RGB16F_EXT = WebGL2RenderingContext.RGB16F;
+      FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT = WebGL2RenderingContext.FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE;
+      UNSIGNED_NORMALIZED_EXT = WebGL2RenderingContext.UNSIGNED_NORMALIZED;
    };
 
    class WebGL1on2Srgb {
-      const SRGB_EXT                                     = 0x8C40;
-      const SRGB_ALPHA_EXT                               = 0x8C42;
-      const SRGB8_ALPHA8_EXT                             = 0x8C43;
-      const FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT    = 0x8210;
+      SRGB_EXT                                     = WebGL2RenderingContext.SRGB;
+      SRGB_ALPHA_EXT                               = WebGL2RenderingContext.SRGB_ALPHA;
+      SRGB8_ALPHA8_EXT                             = WebGL2RenderingContext.SRGB8_ALPHA8;
+      FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT    = WebGL2RenderingContext.FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING;
    };
 
    class WebGL1on2FboRenderMipmap {};
 
    class WebGL1on2ColorBufferFloat {
-      const RGBA32F_EXT = 0x8814;
-      const FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT = 0x8211;
-      const UNSIGNED_NORMALIZED_EXT = 0x8C17;
+      RGBA32F_EXT = WebGL2RenderingContext.RGBA32F;
+      FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT = WebGL2RenderingContext.FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE;
+      UNSIGNED_NORMALIZED_EXT = WebGL2RenderingContext.UNSIGNED_NORMALIZED;
    };
 
    // -
 
-   function hook_general(gl) {
+   function hook(gl) {
       const strict = gl._1on2.strict;
 
+      // -
+
+      const BUFFER_TARGETS = new Set([
+         gl.ARRAY_BUFFER,
+         gl.ELEMENT_ARRAY_BUFFER,
+      ]);
+      const PIXEL_STORE_PNAMES = new Set([
+         gl.PACK_ALIGNMENT,
+         gl.UNPACK_ALIGNMENT,
+         gl.UNPACK_FLIP_Y_WEBGL,
+         gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,
+         gl.UNPACK_COLORSPACE_CONVERSION_WEBGL,
+      ]);
+      const TEXTURE_TARGETS = new Set([
+         gl.TEXTURE_2D,
+         gl.TEXTURE_CUBE_MAP,
+      ]);
+
+      let NUM_DRAW_BUFFERS;
+
       let DRAW_ELEMENTS_TYPES;
-      let RENDERBUFFER_STORAGE_TYPES;
+      let ENABLED_EXTS;
+      let GET_PARAMETER_PNAMES;
+      let RENDERBUFFER_STORAGE_FORMATS;
       let TEX_IMAGE_FORMATS;
       let TEX_IMAGE_TYPES;
 
-      gl._1on2.reset = function() {
+      const fn_reset = function() {
+         for (const k in ENABLED_EXTS) {
+            const ext = ENABLED_EXTS[k];
+            if (ext._1on2) {
+               ext._1on2.gl = null;
+            }
+         }
+         ENABLED_EXTS = {};
+
+         // -
+
+         NUM_DRAW_BUFFERS = 1;
+
          DRAW_ELEMENTS_TYPES = new Set([
             gl.UNSIGNED_BYTE,
             gl.UNSIGNED_SHORT,
          ]);
-         RENDERBUFFER_STORAGE_TYPES = new Set([
+         GET_PARAMETER_PNAMES = new Set([,
+            gl.ACTIVE_TEXTURE,
+            gl.ALIASED_LINE_WIDTH_RANGE,
+            gl.ALIASED_POINT_SIZE_RANGE,
+            gl.ALPHA_BITS,
+            gl.ARRAY_BUFFER_BINDING,
+            gl.BLEND,
+            gl.BLEND_COLOR,
+            gl.BLEND_DST_ALPHA,
+            gl.BLEND_DST_RGB,
+            gl.BLEND_EQUATION,
+            gl.BLEND_EQUATION_ALPHA,
+            gl.BLEND_EQUATION_RGB,
+            gl.BLEND_SRC_ALPHA,
+            gl.BLEND_SRC_RGB,
+            gl.BLUE_BITS,
+            gl.COLOR_CLEAR_VALUE,
+            gl.COLOR_WRITEMASK,
+            gl.COMPRESSED_TEXTURE_FORMATS,
+            gl.CULL_FACE,
+            gl.CULL_FACE_MODE,
+            gl.CURRENT_PROGRAM,
+            gl.DEPTH_BITS,
+            gl.DEPTH_CLEAR_VALUE,
+            gl.DEPTH_FUNC,
+            gl.DEPTH_RANGE,
+            gl.DEPTH_TEST,
+            gl.DEPTH_WRITEMASK,
+            gl.DITHER,
+            gl.ELEMENT_ARRAY_BUFFER_BINDING,
+            gl.FRAMEBUFFER_BINDING,
+            gl.FRONT_FACE,
+            gl.GENERATE_MIPMAP_HINT,
+            gl.GREEN_BITS,
+            gl.IMPLEMENTATION_COLOR_READ_FORMAT,
+            gl.IMPLEMENTATION_COLOR_READ_TYPE,
+            gl.LINE_WIDTH,
+            gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS,
+            gl.MAX_CUBE_MAP_TEXTURE_SIZE,
+            gl.MAX_FRAGMENT_UNIFORM_VECTORS,
+            gl.MAX_RENDERBUFFER_SIZE,
+            gl.MAX_TEXTURE_IMAGE_UNITS,
+            gl.MAX_TEXTURE_SIZE,
+            gl.MAX_VARYING_VECTORS,
+            gl.MAX_VERTEX_ATTRIBS,
+            gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS,
+            gl.MAX_VERTEX_UNIFORM_VECTORS,
+            gl.MAX_VIEWPORT_DIMS,
+            gl.PACK_ALIGNMENT,
+            gl.POLYGON_OFFSET_FACTOR,
+            gl.POLYGON_OFFSET_FILL,
+            gl.POLYGON_OFFSET_UNITS,
+            gl.RED_BITS,
+            gl.RENDERBUFFER_BINDING,
+            gl.RENDERER,
+            gl.SAMPLE_BUFFERS,
+            gl.SAMPLE_COVERAGE_INVERT,
+            gl.SAMPLE_COVERAGE_VALUE,
+            gl.SAMPLES,
+            gl.SCISSOR_BOX,
+            gl.SCISSOR_TEST,
+            gl.SHADING_LANGUAGE_VERSION,
+            gl.STENCIL_BACK_FAIL,
+            gl.STENCIL_BACK_FUNC,
+            gl.STENCIL_BACK_PASS_DEPTH_FAIL,
+            gl.STENCIL_BACK_PASS_DEPTH_PASS,
+            gl.STENCIL_BACK_REF,
+            gl.STENCIL_BACK_VALUE_MASK,
+            gl.STENCIL_BACK_WRITEMASK,
+            gl.STENCIL_BITS,
+            gl.STENCIL_CLEAR_VALUE,
+            gl.STENCIL_FAIL,
+            gl.STENCIL_FUNC,
+            gl.STENCIL_PASS_DEPTH_FAIL,
+            gl.STENCIL_PASS_DEPTH_PASS,
+            gl.STENCIL_REF,
+            gl.STENCIL_TEST,
+            gl.STENCIL_VALUE_MASK,
+            gl.STENCIL_WRITEMASK,
+            gl.SUBPIXEL_BITS,
+            gl.TEXTURE_BINDING_2D,
+            gl.TEXTURE_BINDING_CUBE_MAP,
+            gl.UNPACK_ALIGNMENT,
+            gl.UNPACK_COLORSPACE_CONVERSION_WEBGL,
+            gl.UNPACK_FLIP_Y_WEBGL,
+            gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,
+            gl.VENDOR,
+            gl.VERSION,
+            gl.VIEWPORT,
+         ]);
+         RENDERBUFFER_STORAGE_FORMATS = new Set([
             gl.RGBA4,
             gl.RGB565,
             gl.RGB5_A1,
@@ -193,7 +329,30 @@
             gl.UNSIGNED_SHORT_5_5_5_1,
             gl.UNSIGNED_SHORT_5_6_5,
          ]);
+      };
+
+      fn_reset();
+
+      gl.canvas.addEventListener('webglcontextlost', () => {
+         fn_reset();
+      });
+
+      // -
+
+      let top_error = 0;
+
+      function get_error() {
+         return gl.__proto__.getError.call(gl);
       }
+
+      function flush_error() {
+         const err = get_error();
+         if (!top_error) {
+            top_error = err;
+         }
+      };
+
+      // -
 
       const builtin_exts = [
          'ANGLE_instanced_arrays',
@@ -226,63 +385,120 @@
       {
          const was = gl.getExtension;
          gl.getExtension = function(name) {
-            // Activate implied exts if available.
-            switch (name) {
-            case 'OES_texture_float':
-               gl.getExtension('WEBGL_color_buffer_float');
-               gl.getExtension('EXT_float_blend');
-               break;
-            case 'OES_texture_half_float':
-               gl.getExtension('EXT_color_buffer_half_float');
-               break;
-            case 'WEBGL_color_buffer_float':
-               gl.getExtension('EXT_float_blend');
-               break;
-            }
+            let ext = ENABLED_EXTS[name];
+            if (ext) return ext;
+            return ENABLED_EXTS[name] = (() => {
+               console.log(`+getExtension(${name})`);
+               // Activate implied exts if available.
+               switch (name) {
+               case 'OES_texture_float':
+                  gl.getExtension('WEBGL_color_buffer_float');
+                  gl.getExtension('EXT_float_blend');
+                  break;
+               case 'OES_texture_half_float':
+                  gl.getExtension('EXT_color_buffer_half_float');
+                  break;
+               case 'WEBGL_color_buffer_float':
+                  gl.getExtension('EXT_float_blend');
+                  break;
+               }
 
-            // Now make the actual ext objects.
-            switch (name) {
-            case 'ANGLE_instanced_arrays'       : return new WebGL1on2InstancedArrays(gl);
-            case 'EXT_blend_minmax':
-               BLEND_MODES.add(gl.MIN);
-               BLEND_MODES.
-               return new WebGL1on2BlendMinMax();
-            case 'EXT_frag_depth'               : return new WebGL1on2FragDepth();
-            case 'EXT_shader_texture_lod'       : return new WebGL1on2ShaderTextureLod();
-            case 'OES_element_index_uint':
-               DRAW_ELEMENTS_TYPES.add(gl.UNSIGNED_INT);
-               return new WebGL1on2ElementIndexUint();
+               // Now make the actual ext objects.
+               switch (name) {
+               case 'ANGLE_instanced_arrays'       : return new WebGL1on2InstancedArrays(gl);
+               case 'EXT_blend_minmax':
+                  BLEND_MODES.add(gl.__proto__.MIN);
+                  BLEND_MODES.add(gl.__proto__.MAX);
+                  return new WebGL1on2BlendMinMax();
 
-            case 'OES_standard_derivatives'     : return new WebGL1on2StandardDerivatives();
+               case 'EXT_frag_depth'               : return new WebGL1on2FragDepth();
+               case 'EXT_shader_texture_lod'       : return new WebGL1on2ShaderTextureLod();
+               case 'OES_element_index_uint':
+                  DRAW_ELEMENTS_TYPES.add(gl.UNSIGNED_INT);
+                  return new WebGL1on2ElementIndexUint();
 
-            case 'OES_texture_float':
-               TEX_IMAGE_TYPES.add(gl.FLOAT);
-               return new WebGL1on2TextureFloat();
+               case 'OES_standard_derivatives'     : return new WebGL1on2StandardDerivatives();
 
-            case 'OES_texture_half_float'       : return new WebGL1on2TextureHalfFloat();
-            case 'OES_texture_half_float_linear': return new WebGL1on2TextureHalfFloatLinear();
-            case 'OES_vertex_array_object'      : return new WebGL1on2VertexArrayObject(gl);
-            case 'WEBGL_depth_texture'          : return new WebGL1on2DepthTexture();
-            case 'WEBGL_draw_buffers'           : return new WebGL1on2DrawBuffers(gl);
-            case 'EXT_sRGB'                     : return new WebGL1on2Srgb();
-            case 'OES_fbo_render_mipmap'        : return new WebGL1on2FboRenderMipmap();
+               case 'OES_texture_float':
+                  TEX_IMAGE_TYPES.add(gl.FLOAT);
+                  return new WebGL1on2TextureFloat();
 
-            case 'EXT_color_buffer_half_float':
-               const ext = was.call(this, 'EXT_color_buffer_float');
-               if (!ext) return null;
-               return new WebGL1on2ColorBufferHalfFloat();
+               case 'OES_texture_half_float':
+                  TEX_IMAGE_TYPES.add(GL_HALF_FLOAT_OES);
+                  return new WebGL1on2TextureHalfFloat();
 
-            case 'WEBGL_color_buffer_float':
-               const ext = was.call(this, 'EXT_color_buffer_float');
-               if (!ext) return null;
-               return new WebGL1on2ColorBufferFloat();
+               case 'OES_texture_half_float_linear': return new WebGL1on2TextureHalfFloatLinear();
+               case 'OES_vertex_array_object'      : return new WebGL1on2VertexArrayObject(gl);
+               case 'WEBGL_depth_texture'          : return new WebGL1on2DepthTexture();
 
-            default:
-               return was.call(this, name);
-            }
+               case 'WEBGL_draw_buffers':
+                  NUM_DRAW_BUFFERS = gl.__proto__.getParameter.call(gl, gl.__proto__.MAX_DRAW_BUFFERS);
+                  for (let i = 0; i < 16; i++) {
+                     GET_PARAMETER_PNAMES.add(gl.__proto__.COLOR_ATTACHMENT0+i);
+                     GET_PARAMETER_PNAMES.add(gl.__proto__.DRAW_BUFFER0+i);
+                  }
+                  GET_PARAMETER_PNAMES.add(gl.__proto__.MAX_COLOR_ATTACHMENTS);
+                  GET_PARAMETER_PNAMES.add(gl.__proto__.MAX_DRAW_BUFFERS);
+                  return new WebGL1on2DrawBuffers(gl);
+
+               case 'EXT_sRGB'                     : return new WebGL1on2Srgb();
+               case 'OES_fbo_render_mipmap'        : return new WebGL1on2FboRenderMipmap();
+
+               case 'EXT_color_buffer_half_float':
+                  ext = was.call(this, 'EXT_color_buffer_float');
+                  if (!ext) return null;
+                  return new WebGL1on2ColorBufferHalfFloat();
+
+               case 'WEBGL_color_buffer_float':
+                  ext = was.call(this, 'EXT_color_buffer_float');
+                  if (!ext) return null;
+                  return new WebGL1on2ColorBufferFloat();
+
+               default:
+                  return was.call(this, name);
+               }
+            })();
          };
       }
 
+
+      {
+         const was = gl.bindBuffer;
+         gl.bindBuffer = function() {
+            if (strict) {
+               if (!BUFFER_TARGETS.has(arguments[0])) {
+                  arguments[0] += 0x10000;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+
+      {
+         const was = gl.bindFramebuffer;
+         gl.bindFramebuffer = function() {
+            if (strict) {
+               if (arguments[0] != gl.FRAMEBUFFER) {
+                  arguments[0] += 0x10000;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+
+      {
+         const was = gl.bindTexture;
+         gl.bindTexture = function() {
+            if (strict) {
+               if (!TEXTURE_TARGETS.has(arguments[0])) {
+                  arguments[0] += 0x10000;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+
+      // -
 
       {
          const was = gl.drawElements;
@@ -297,9 +513,101 @@
       }
 
       {
+         const was = gl.disable;
+         gl.disable = function() {
+            if (strict) {
+               if (arguments[0] == gl.__proto__.RASTERIZER_DISCARD) {
+                  arguments[0] += 0x10000;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+      {
+         const was = gl.enable;
+         gl.enable = function() {
+            if (strict) {
+               if (arguments[0] == this.__proto__.RASTERIZER_DISCARD) {
+                  arguments[0] += 0x10000;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+      {
+         const was = gl.getParameter;
+         gl.getParameter = function() {
+            if (strict) {
+               //console.log('getParameter', arguments[0].toString(16));
+               if (!GET_PARAMETER_PNAMES.has(arguments[0])) {
+                  arguments[0] += 0x10000;
+               }
+            }
+            return was.apply(this, arguments);
+         }
+      }
+
+      // -
+
+      {
+         const was = gl.framebufferRenderbuffer;
+         gl.framebufferRenderbuffer = function() {
+            if (strict) {
+               switch (arguments[1]) {
+               case gl.DEPTH_ATTACHMENT:
+               case gl.STENCIL_ATTACHMENT:
+               case gl.DEPTH_STENCIL_ATTACHMENT:
+                  break;
+               default:
+                  if (arguments[1] - gl.COLOR_ATTACHMENT0 >= NUM_DRAW_BUFFERS) {
+                     arguments[1] += 0x10000;
+                  }
+                  break;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+      {
+         const was = gl.framebufferTexture2D;
+         gl.framebufferTexture2D = function() {
+            if (strict) {
+               switch (arguments[1]) {
+               case gl.DEPTH_ATTACHMENT:
+               case gl.STENCIL_ATTACHMENT:
+               case gl.DEPTH_STENCIL_ATTACHMENT:
+                  break;
+               default:
+                  if (arguments[1] - gl.COLOR_ATTACHMENT0 >= NUM_DRAW_BUFFERS) {
+                     arguments[1] += 0x10000;
+                  }
+                  break;
+               }
+
+               if (arguments[4] != 0) {
+                  arguments[4] = -1;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+
+      {
+         const was = gl.pixelStorei;
+         gl.pixelStorei = function() {
+            if (strict) {
+               if (!PIXEL_STORE_PNAMES.has(arguments[0])) {
+                  arguments[0] += 0x10000;
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+
+      {
          const was = gl.readPixels;
          gl.readPixels = function() {
-            if (arguments[5] == HALF_FLOAT_OES) {
+            if (arguments[5] == GL_HALF_FLOAT_OES) {
                arguments[5] = gl.HALF_FLOAT;
             }
             was.apply(this, arguments);
@@ -310,7 +618,7 @@
          const was = gl.renderbufferStorage;
          gl.renderbufferStorage = function() {
             if (strict) {
-               if (!RENDERBUFFER_STORAGE_TYPES.has(arguments[1])) {
+               if (!RENDERBUFFER_STORAGE_FORMATS.has(arguments[1])) {
                   arguments[1] += 0x10000; // 0x1408 would become 0x11408.
                }
             }
@@ -321,26 +629,30 @@
          }
       }
 
-
       {
          const was = gl.texImage2D;
          gl.texImage2D = function() {
-            let format_id, type_id;
+            let internalformat_id, format_id, type_id;
+            //console.log('texImage2D', ...arguments);
             switch (arguments.length) {
             case 9:
+               internalformat_id = 2;
                format_id = 6;
                type_id = format_id + 1;
                break;
             case 6:
+               internalformat_id = 2;
                format_id = 3;
                type_id = format_id + 1;
                break;
             default:
+               console.warning(`texImage2D[${arguments.length}]`);
                if (strict) {
                   throw new Error('Too many arguments: ' + arguments);
                }
                break;
             }
+
             if (strict) {
                if (!TEX_IMAGE_FORMATS.has(arguments[format_id])) {
                   arguments[format_id] = 0x10000;
@@ -350,15 +662,48 @@
                }
             }
 
-            if (type_id && arguments[type_id] == HALF_FLOAT_OES) {
-               arguments[type_id] = gl.HALF_FLOAT;
+            if (type_id && arguments[type_id] == GL_HALF_FLOAT_OES) {
+               arguments[type_id] = gl.__proto__.HALF_FLOAT;
+               switch (arguments[internalformat_id]) {
+                  case gl.RGB:
+                     arguments[internalformat_id] = gl.__proto__.RGB16F;
+                     break;
+                  case gl.RGBA:
+                     arguments[internalformat_id] = gl.__proto__.RGBA16F;
+                     break;
+                  case gl.LUMINANCE:
+                  case gl.ALPHA:
+                  case gl.LUMINANCE_ALPHA:
+                     console.warning(`texImage with {format: ${arguments[internalformat_id]}, type:`
+                                     + `${arguments[type_id]}} not yet supported.`);
+                     break;
+               }
             }
+            if (type_id && arguments[type_id] == gl.FLOAT) {
+               switch (arguments[internalformat_id]) {
+                  case gl.RGB:
+                     arguments[internalformat_id] = gl.__proto__.RGB32F;
+                     break;
+                  case gl.RGBA:
+                     arguments[internalformat_id] = gl.__proto__.RGBA32F;
+                     break;
+                  case gl.LUMINANCE:
+                  case gl.ALPHA:
+                  case gl.LUMINANCE_ALPHA:
+                     console.warning(`texImage with {format: ${arguments[internalformat_id]}, type:`
+                                     + `${arguments[type_id]}} not yet supported.`);
+                     break;
+               }
+            }
+            //console.log(`=> ${arguments[internalformat_id]}`);
+
             was.apply(this, arguments);
          }
       }
       {
          const was = gl.texSubImage2D;
          gl.texSubImage2D = function() {
+            //console.log('texSubImage2D', ...arguments);
             let format_id, type_id;
             switch (arguments.length) {
             case 9:
@@ -384,15 +729,28 @@
                }
             }
 
-            if (type_id && arguments[type_id] == HALF_FLOAT_OES) {
-               arguments[type_id] = gl.HALF_FLOAT;
+            if (type_id && arguments[type_id] == GL_HALF_FLOAT_OES) {
+               arguments[type_id] = gl.__proto__.HALF_FLOAT;
             }
             was.apply(this, arguments);
          }
       }
-   };
 
-   function hook_shader_source(gl) {
+      {
+         const was = gl.vertexAttribPointer;
+         gl.vertexAttribPointer = function() {
+            if (strict) {
+               if (arguments[2] == gl.__proto__.HALF_FLOAT) {
+                  arguments[2] += 0x10000; // 0x1408 would become 0x11408.
+               }
+            }
+            was.apply(this, arguments);
+         }
+      }
+
+      // -
+      // Hook shaders
+
       {
          const was = gl.createShader;
          gl.createShader = function(type) {
@@ -407,99 +765,256 @@
       }
 
       {
-         const was = gl.shaderSource;
-         gl.shaderSource = function(shader, source) {
-            if (shader._1on2) {
-               const before = source;
+         const was = gl.compileShader;
+         gl.compileShader = function(shader) {
+            // I guess just pass through, then do the real work in compileShader.
+            if (!shader._1on2) return;
 
-               const re_attrib = /(\W)attribute(\W)/g;
-               const re_varying = /(\W)varying(\W)/g;
-               const re_frag_color = /(\W)gl_FragColor(\W)/g;
-               const re_frag_data = /(\W)gl_FragData(\W)/g;
-               const re_ext_draw_buffers = /# *extension +GL_EXT_draw_buffers *: *.*\n/g;
-               const re_ext_frag_depth = /# *extension +GL_EXT_frag_depth *: *.*\n/g;
-               const re_ext_shader_texture_lod = /# *extension +GL_EXT_shader_texture_lod *: *.*\n/g;
-               const re_ext_standard_derivatives = /# *extension +GL_OES_standard_derivatives *: *.*\n/g;
+            const before = gl.getShaderSource(shader);
 
-               const type = shader._1on2.type;
+            const CORE_EXT_BY_GLSL = {
+               'GL_EXT_frag_depth': 'EXT_frag_depth',
+               'GL_EXT_shader_texture_lod': 'EXT_shader_texture_lod',
+               'GL_OES_standard_derivatives': 'OES_standard_derivatives',
+               'GL_EXT_draw_buffers': 'WEBGL_draw_buffers',
+            };
 
-               const header = [
-                  '#version 300 es',
-                  '#define GL_FRAGMENT_PRECISION_HIGH 1',
+            // -
 
-                  '#define texture2D texture',
-                  '#define texture2DLod textureLod',
-                  '#define texture2DProj textureProj',
-                  '#define texture2DProjLod textureProjLod',
-                  '#define textureCube texture',
-                  '#define textureCubeLod textureLod',
+            let source = before;
 
-                  '#define GL_EXT_draw_buffers 1',
-
-                  '#define GL_EXT_frag_depth 1',
-                  '#define gl_FragDepthEXT gl_FragDepth',
-
-                  '#define GL_EXT_shader_texture_lod 1',
-                  '#define texture2DLodEXT textureLod',
-                  '#define texture2DProjLodEXT textureProjLod',
-                  '#define textureCubeLodEXT textureLod',
-                  '#define texture2DGradEXT textureGrad',
-                  '#define texture2DProjGradEXT textureProjGrad',
-                  '#define textureCubeGradEXT textureGrad',
-
-                  '#define GL_OES_standard_derivatives 1',
-               ];
-               source = source.replace(re_ext_draw_buffers, '\n');
-               source = source.replace(re_ext_frag_depth, '\n');
-               source = source.replace(re_ext_shader_texture_lod, '\n');
-               source = source.replace(re_ext_standard_derivatives, '\n');
-
-               if (type == 'vs') {
-                  source = source.replace(re_attrib, '$1in$2');
-                  source = source.replace(re_varying, '$1out$2');
-               } else {
-                  header.push('out highp vec4 _1on2_FragData[gl_MaxDrawBuffers];');
-                  source = source.replace(re_varying, '$1in$2');
-                  source = source.replace(re_frag_color, '$1gl_FragData[0]$2');
-                  source = source.replace(re_frag_data, '$1_1on2_FragData$2');
-               }
-
-               // -
-
-               source = header.join('\n') + '\n#line 1\n' + source;
-               console.log(type, 'before', before, 'after', source);
+            function to_namespace(name) {
+               return '_1on2_' + name;
             }
+
+            function namespace_replace(name) {
+               const re = new RegExp(`\\b${name}\\b`, 'g');
+               source = source.replace(re, '_1on2_' + name);
+            }
+
+            // -
+
+            // "extension directive must occur before any non-preprocessor tokens in ESSL"
+
+            let header = [
+               '#version 300 es',
+
+               '#define texture2D texture',
+               '#define texture2DLod textureLod',
+               '#define texture2DProj textureProj',
+               '#define texture2DProjLod textureProjLod',
+               '#define textureCube texture',
+               '#define textureCubeLod textureLod',
+
+               // EXT_shader_texture_lod
+               '#define texture2DLodEXT textureLod',
+               '#define texture2DProjLodEXT textureProjLod',
+               '#define textureCubeLodEXT textureLod',
+               '#define texture2DGradEXT textureGrad',
+               '#define texture2DProjGradEXT textureProjGrad',
+               '#define textureCubeGradEXT textureGrad',
+            ];
+
+            const re_ext = / *# *extension +([A-Za-z0-9_]+) *: *([a-z]+)/g;
+            let draw_buffers_enabled = false;
+            for (const match of source.matchAll(re_ext)) {
+               const [str, glsl_ext, directive] = match;
+               const gl_ext = CORE_EXT_BY_GLSL[glsl_ext];
+               if (!gl_ext) {
+                  header.push(str);
+                  continue;
+               }
+               const gl_enabled = !!ENABLED_EXTS[gl_ext];
+               if (!gl_enabled) {
+                  header.push(str);
+                  continue;
+               }
+               header.push()
+
+               const glsl_enabled = (directive != 'disable');
+
+               switch (gl_ext) {
+               case 'EXT_frag_depth':
+                  if (glsl_enabled) {
+                     header.push('#define gl_FragDepthEXT gl_FragDepth');
+                  }
+                  break;
+
+               case 'EXT_shader_texture_lod':
+                  if (glsl_enabled) {
+                     header = header.concat([
+                        '#define texture2DLodEXT textureLod',
+                        '#define texture2DProjLodEXT textureProjLod',
+                        '#define textureCubeLodEXT textureLod',
+                        '#define texture2DGradEXT textureGrad',
+                        '#define texture2DProjGradEXT textureProjGrad',
+                        '#define textureCubeGradEXT textureGrad'
+                     ]);
+                  }
+                  break;
+
+               case 'OES_standard_derivatives':
+                  if (!glsl_enabled) {
+                     header = header.concat([
+                        '#define dFdx _1on2_disabled_dFdx',
+                        '#define dFdy _1on2_disabled_dFdy',
+                        '#define fwidth _1on2_disabled_fwidth',
+                     ]);
+                  }
+                  break;
+
+               case 'WEBGL_draw_buffers':
+                  draw_buffers_enabled = glsl_enabled;
+                  break;
+               }
+            }
+            source = source.replace(re_ext, '');
+
+            const max_draw_buffers = NUM_DRAW_BUFFERS;
+            header.push(`const mediump int ${to_namespace('gl_MaxDrawBuffers')} = ${max_draw_buffers};`);
+            namespace_replace('gl_MaxDrawBuffers');
+
+            for (const glslext in CORE_EXT_BY_GLSL) {
+               const glext = CORE_EXT_BY_GLSL[glslext];
+               namespace_replace(glslext);
+               if (!ENABLED_EXTS[glext]) continue;
+               header.push(`#define ${to_namespace(glslext)} 1`);
+            }
+
+            // `texture` is newly reserved in essl300.
+            namespace_replace('texture');
+
+            const type = shader._1on2.type;
+            if (type == 'vs') {
+               source = source.replace(/\battribute\b/g, 'in');
+               source = source.replace(/\bvarying\b/g, 'out');
+            } else {
+               source = source.replace(/\bvarying\b/g, 'in');
+
+               const has_frag_color = (source.search(/\bgl_FragColor\b/g) != -1);
+               source = source.replace(/\bgl_FragColor\b/g, 'gl_FragData[0]');
+
+               const has_output = (source.search(/\bgl_FragData\b/g) != -1);
+               const out_list_arr = [];
+               if (has_output) {
+                  namespace_replace('gl_FragData');
+
+                  const indexable_name = to_namespace('gl_FragData');
+                  const out_name = indexable_name + '_out';
+                  const outputs = (draw_buffers_enabled ? max_draw_buffers : 1);
+                  header.push(`highp vec4 ${indexable_name}[${outputs}];`);
+                  header.push(`out highp vec4 ${out_name}[${outputs}];`);
+
+                  const broadcast = (draw_buffers_enabled && has_frag_color);
+                  for (let i = 0; i < outputs; i++) {
+                     const from_i = (broadcast ? 0 : i);
+                     out_list_arr.push(`   ${out_name}[${i}] = ${indexable_name}[${from_i}];`);
+                  }
+               }
+               const out_list = out_list_arr.join('\n');
+
+               source = source.replace(/\bmain\b/g, '_1on2_inner_main');
+               source += `
+void main() {
+   _1on2_inner_main();
+${out_list}
+}
+               `;
+            }
+
+            // -
+
+            const parts = header.concat('#line 1', source);
+            source = parts.join('\n');
+
+            const DUMP_SHADER_TRANSLATION = false;
+            if (DUMP_SHADER_TRANSLATION) {
+               console.log(type, '\nBEFORE:');
+               console.log(before);
+               console.log('\nAFTER:\n');
+               console.log(source);
+            }
+
+            gl.shaderSource(shader, source);
             arguments[1] = source;
             was.apply(this, arguments);
+            gl.shaderSource(shader, before); // Restore it.
          };
       }
    }
 
-   function hide_webgl2(gl) {
+   const NOT_IN_WEBGL1 = [
+      'beginQuery',
+      'beginTransformFeedback',
+      'bindBufferBase',
+      'bindBufferRange',
+      'bindSampler',
+      'bindTransformFeedback',
+      'bindVertexArray',
+      'blitFramebuffer',
+      'clearBufferfi',
+      'clearBufferfv',
+      'clearBufferiv',
+      'clearBufferuiv',
+      'clearBufferuiv',
+      'clientWaitSync',
+      'compressedTexImage3D',
+      'compressedTexSubImage3D',
+      'copyBufferSubData',
+      'copyTexSubImage3D',
+      'createQuery',
+      'createSampler',
+      'texImage3D',
+      'texSubImage3D',
+      'texStorage2D',
+      'texStorage3D',
+      'framebufferLayer',
+   ];
 
+   function hide_webgl2(gl) {
+      const undefined_desc = {
+         value: undefined,
+      };
+      for (const k in WebGL2RenderingContext.prototype) {
+         if (!(k in WebGLRenderingContext.prototype)) {
+            Object.defineProperty(gl, k, undefined_desc);
+         }
+      }
    }
 
    prev = HTMLCanvasElement.prototype.getContext;
+   prev._foo = true;
+   //console.log('prev', prev);
    HTMLCanvasElement.prototype.getContext = function() {
-      const as_strict = (arguments[0] == 'webgl');
+      if (DEBUG_SPEW) {
+         console.log('getContext ', ...arguments);
+      }
+
+      const as_strict = (REPLACE_WEBGL1 && ['webgl', 'experimental-webgl'].includes(arguments[0]));
       const as_hybrid = (arguments[0] == 'webgl1on2');
       const as_1on2 = (as_strict || as_hybrid);
       if (as_1on2) {
          arguments[0] = 'webgl2';
+
+         if (DEBUG_SPEW) {
+            console.log('=> webgl2');
+         }
       }
 
       const ret = prev.apply(this, arguments);
+      //console.log('ret', ret);
       if (as_1on2 && ret && !ret._1on2) {
          ret._1on2 = {
             strict: as_strict,
-            hidden: {},
-         }
-         hook_general(ret);
-         hook_shader_source(ret);
+         };
+         hook(ret);
          if (as_strict) {
             hide_webgl2(ret);
          }
       }
       return ret;
-   }
+   };
+
+   console.log('[webgl-1on2] Injected.');
 })();
+

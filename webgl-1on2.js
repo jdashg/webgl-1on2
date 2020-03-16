@@ -191,6 +191,13 @@
          gl.TEXTURE_2D,
          gl.TEXTURE_CUBE_MAP,
       ]);
+      const VERTEX_ATTRIB_TYPES = new Set([
+         gl.BYTE,
+         gl.SHORT,
+         gl.UNSIGNED_BYTE,
+         gl.UNSIGNED_SHORT,
+         gl.FLOAT,
+      ]);
 
       let NUM_DRAW_BUFFERS;
 
@@ -655,10 +662,10 @@
 
             if (strict) {
                if (!TEX_IMAGE_FORMATS.has(arguments[format_id])) {
-                  arguments[format_id] = 0x10000;
+                  arguments[format_id] += 0x10000;
                }
                if (!TEX_IMAGE_TYPES.has(arguments[type_id])) {
-                  arguments[type_id] = 0x10000;
+                  arguments[type_id] += 0x10000;
                }
             }
 
@@ -722,10 +729,10 @@
             }
             if (strict) {
                if (!TEX_IMAGE_FORMATS.has(arguments[format_id])) {
-                  arguments[format_id] = 0x10000;
+                  arguments[format_id] += 0x10000;
                }
                if (!TEX_IMAGE_TYPES.has(arguments[type_id])) {
-                  arguments[type_id] = 0x10000;
+                  arguments[type_id] += 0x10000;
                }
             }
 
@@ -740,8 +747,9 @@
          const was = gl.vertexAttribPointer;
          gl.vertexAttribPointer = function() {
             if (strict) {
-               if (arguments[2] == gl.__proto__.HALF_FLOAT) {
-                  arguments[2] += 0x10000; // 0x1408 would become 0x11408.
+               const type_id = 2;
+               if (!VERTEX_ATTRIB_TYPES.has(arguments[type_id])) {
+                  arguments[type_id] += 0x10000;
                }
             }
             was.apply(this, arguments);

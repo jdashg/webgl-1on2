@@ -386,6 +386,7 @@
       }
       supported_exts = supported_exts.concat(builtin_exts);
       gl.getSupportedExtensions = function() {
+         if (gl.isContextLost()) return null;
          return supported_exts.slice();
       }
 
@@ -630,7 +631,7 @@
                }
             }
             if (arguments[1] == gl.DEPTH_STENCIL) {
-               arguments[1] = gl.DEPTH24_STENCIL8;
+               arguments[1] = gl.__proto__.DEPTH24_STENCIL8;
             }
             was.apply(this, arguments);
          }
@@ -779,6 +780,7 @@
             if (!shader._1on2) return;
 
             const before = gl.getShaderSource(shader);
+            if (before === null) return; // context loss
 
             const CORE_EXT_BY_GLSL = {
                'GL_EXT_frag_depth': 'EXT_frag_depth',
@@ -1012,9 +1014,11 @@ ${out_list}
       const ret = prev.apply(this, arguments);
       //console.log('ret', ret);
       if (as_1on2 && ret && !ret._1on2) {
-         ret._1on2 = {
-            strict: as_strict,
-         };
+         Object.defineProperty(ret, '_1on2', {
+            value: {
+               strict: as_strict,
+            },
+         });
          hook(ret);
          if (as_strict) {
             hide_webgl2(ret);
